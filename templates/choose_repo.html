@@ -1,0 +1,9 @@
+<form action=/choosed method=post>
+  <input name=site placeholder='your site base url'>
+  <select name=repo>
+    {% for repo in repos %}
+      <option value={{ repo.full_name }}>{{ repo.name }}</option>
+    {% endfor %}
+  </select>
+  <button type=submit>start receiving webmentions</button>
+</form>
