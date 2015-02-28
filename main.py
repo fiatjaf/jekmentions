@@ -97,6 +97,10 @@ def webmention_endpoint():
 
     # parse the webmention
     webmention = went.Webmention(url=source, target=target)
+    if not webmention or not hasattr(webmention, 'body'):
+        print request.url
+        print request.form
+        return abort(400)
 
     # create the webmention file with its yaml frontmatter
     body = webmention.body
