@@ -112,7 +112,12 @@ def webmention_endpoint():
     except: pass
     del metadata['author'] # jekyll doesn't support yaml trees
 
+    metadata['target'] = request.form['target']
+
     wm_file = u'---\n%s---\n%s' % (pyaml.dump(metadata), body)
+
+    if u'…' in path:
+        return 'not ok'
 
     # commit the webmention file at the github repo
     r = requests.put(
@@ -128,7 +133,6 @@ def webmention_endpoint():
         })
     )
 
-    return r.text
     return 'ok'
 
 @app.route('/logout')
