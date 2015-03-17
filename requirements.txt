@@ -13,5 +13,5 @@ pyaml==15.02.1
 redis==2.10.3
 requests==2.5.3
 six==1.9.0
-went==0.0.6
+went==0.0.8
 wsgiref==0.1.2

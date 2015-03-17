@@ -107,7 +107,7 @@ def webmention_endpoint():
     metadata = webmention.__dict__
     del metadata['summary']
     del metadata['body']
-    metadata['source'] = metadata.pop('url') # jekyll reservers the '.url'
+    metadata['source'] = metadata.pop('url') or source # jekyll reservers the '.url'
     try: metadata['author_url'] = metadata['author'].pop('url')
     except: pass
     try: metadata['author_name'] = metadata['author'].pop('name')
@@ -124,18 +124,17 @@ def webmention_endpoint():
         return 'not ok'
 
     # commit the webmention file at the github repo
-    r = requests.put(
-        'https://api.github.com/repos/' + repo + '/contents/_webmentions/' + path + '/' + hashlib.md5(metadata['source']).hexdigest() + '.md',
-        params={'access_token': token},
-        data=json.dumps({
-            'content': base64.b64encode(wm_file.encode('utf-8')),
-            'message': 'webmention from ' + source,
-            'committer': {
-                'name': 'Jekmention',
-                'email': 'jekmention@jekmentions.alhur.es'
-            }
-        })
-    )
+    url = 'https://api.github.com/repos/' + repo + '/contents/_webmentions/' + path + '/' + hashlib.md5(metadata['source']).hexdigest() + '.md'
+    content = base64.b64encode(wm_file.encode('utf-8'))
+    data = {
+        'content': content,
+        'message': 'webmention from ' + source,
+        'committer': {
+            'name': 'Jekmention',
+            'email': 'jekmention@jekmentions.alhur.es'
+        }
+    }
+    r = requests.put(url, params={'access_token': token}, data=json.dumps(data))
 
     return 'ok'
 
