@@ -7,4 +7,4 @@ GITHUB_APP_ID = os.getenv('GITHUB_APP_ID')
 GITHUB_APP_SECRET = os.getenv('GITHUB_APP_SECRET')
 GITHUB_APP_STATE = os.getenv('GITHUB_APP_STATE') or 'banana'
 
-REDIS_URL = os.getenv('REDISTOGO_URL')
+REDIS_URL = os.getenv('REDISCLOUD_URL')
