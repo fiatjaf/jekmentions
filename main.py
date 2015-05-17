@@ -96,7 +96,10 @@ def webmention_endpoint():
         abort(500)
 
     # parse the webmention
-    webmention = went.Webmention(url=source, target=target)
+    try:
+        webmention = went.Webmention(url=source, target=target)
+    except went.NoContent:
+        webmention = None
     if not webmention or not hasattr(webmention, 'body'):
         print request.url
         print request.form
