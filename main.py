@@ -98,9 +98,10 @@ def webmention_endpoint():
     # parse the webmention
     try:
         webmention = went.Webmention(url=source, target=target)
-    except went.NoContent:
+    except (went.NoContent, went.NoURLInSource):
         webmention = None
     if not webmention or not hasattr(webmention, 'body'):
+        print 'request failed: 400'
         print request.url
         print request.form
         return abort(400)
@@ -115,11 +116,11 @@ def webmention_endpoint():
         'name': webmention.name,
         'target': request.form['target'],
     }
-    try: metadata['author_url'] = metadata['author'].pop('url')
+    try: metadata['author_url'] = webmention.author.url
     except: pass
-    try: metadata['author_name'] = metadata['author'].pop('name')
+    try: metadata['author_name'] = webmention.author.name
     except: pass
-    try: metadata['author_image'] = metadata['author'].pop('photo')
+    try: metadata['author_image'] = webmention.author.photo
     except: pass
 
     wm_file = u'---\n%s---\n%s' % (pyaml.dump(metadata), body)
