@@ -107,19 +107,20 @@ def webmention_endpoint():
 
     # create the webmention file with its yaml frontmatter
     body = webmention.body
-    metadata = webmention.__dict__
-    del metadata['summary']
-    del metadata['body']
-    metadata['source'] = metadata.pop('url') or source # jekyll reservers the '.url'
+
+    # jekyll doesn't support yaml trees
+    metadata = {
+        'date': webmention.date,
+        'source': webmention.url or source, # jekyll reservers the '.url' attr
+        'name': webmention.name,
+        'target': request.form['target'],
+    }
     try: metadata['author_url'] = metadata['author'].pop('url')
     except: pass
     try: metadata['author_name'] = metadata['author'].pop('name')
     except: pass
     try: metadata['author_image'] = metadata['author'].pop('photo')
     except: pass
-    del metadata['author'] # jekyll doesn't support yaml trees
-
-    metadata['target'] = request.form['target']
 
     wm_file = u'---\n%s---\n%s' % (pyaml.dump(metadata), body)
 
