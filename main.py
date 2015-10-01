@@ -5,8 +5,8 @@ import json
 import urllib
 import requests
 import datetime
-import hashlib
 import base64
+import time
 import pyaml
 import went
 from urlparse import urlparse
@@ -129,7 +129,7 @@ def webmention_endpoint():
         return 'not ok'
 
     # commit the webmention file at the github repo
-    url = 'https://api.github.com/repos/' + repo + '/contents/_webmentions/' + path + '/' + hashlib.md5(metadata['source']).hexdigest() + '.md'
+    url = 'https://api.github.com/repos/' + repo + '/contents/_webmentions/' + path + '/' + string(int(time.time())) + '.md'
     content = base64.b64encode(wm_file.encode('utf-8'))
     data = {
         'content': content,
