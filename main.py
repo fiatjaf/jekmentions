@@ -50,7 +50,8 @@ def github_redirect():
 @app.route('/choose_repo')
 def choose_repo():
     r = requests.get('https://api.github.com/user/repos',
-        params={'access_token': session['token']})
+        params={'access_token': session['token'],
+                'per_page': 100})
 
     return render_template('choose_repo.html', repos=r.json())
 
