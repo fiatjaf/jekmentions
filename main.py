@@ -14,7 +14,7 @@ from redis import StrictRedis
 from flask import Flask, session, jsonify, redirect, request, render_template, abort
 
 app = Flask(__name__)
-app.secret_key = 'JKBW,KQ4B,shwghg4hgbhgwhtqdbaskr34234257'
+app.secret_key = settings.GITHUB_APP_STATE
 app.debug = True
 
 redis = StrictRedis.from_url(settings.REDIS_URL)
