@@ -52,8 +52,13 @@ def choose_repo():
     r = requests.get('https://api.github.com/user/repos',
         params={'access_token': session['token'],
                 'per_page': 100})
-
-    return render_template('choose_repo.html', repos=r.json())
+				
+    repos = r.json()
+    while 'next' in r.links:
+        print r.links['next']['url']
+        r = requests.get(r.links['next']['url'], params={'access_token': session['token'], 'per_page': 100})
+        repos += r.json()
+    return render_template('choose_repo.html', repos=repos)
 
 @app.route('/choosed', methods=['POST'])
 def choosed_repo():
